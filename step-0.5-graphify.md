@@ -216,8 +216,7 @@ This is separate from the `.graphifyignore` entry in 0.5.1: `.graphifyignore` st
 
 - `graphify-out/GRAPH_REPORT.md` — god nodes, communities, suggested questions
 - `graphify-out/graph.json` — queryable graph
-- `.claude/skills/graphify/SKILL.md` + `when-to-use.md` — graph-first gate and query playbook
-- `.github/prompts/graphify.prompt.md` — Copilot `/graphify` prompt (create if not auto-installed)
+- `.claude/skills/graphify/SKILL.md` + `when-to-use.md` — graph-first gate and query playbook (visible to Copilot Chat directly as `/graphify`, no separate prompt file)
 - CLAUDE.md graphify routing row + PreToolUse hook (via `graphify claude install --project`)
 - Short Graphify line in `AGENTS.md` (via `graphify vscode install` — merge in Step 2; keep minimal)
 
