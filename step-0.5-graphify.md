@@ -263,6 +263,26 @@ Default playbook — full detail in `GRAPHIFY_GUIDE.md` § Update strategy:
 
 Do **not** run `graphify extract .` every session — use `update` incrementally; full extract is the exception.
 
+### Live freshness during dev *(optional — recommended for active sessions)*
+
+The git hooks refresh the graph on commit/checkout, but **not while you edit uncommitted code** — so a mid-session architecture query can hit a stale graph. If the project has a dev-server file watcher, wire a debounced, guarded `graphify update .` into it to close that gap (AST-only, no API cost). Vite example (`vite-plugin-watch-and-run`, already common in SvelteKit/Vite repos):
+
+```js
+{
+  name: 'graphify',
+  watchKind: ['add', 'change', 'unlink'],
+  watch: path.resolve('src/**/*.{ts,svelte}'),
+  run: '[ -d graphify-out ] && command -v graphify >/dev/null 2>&1 && graphify update . || true',
+  delay: 2000,
+}
+```
+
+The guard makes it a **no-op** for devs without graphify or a local graph (keeps it opt-in). Same idea for webpack watch hooks, `nodemon`, or a `chokidar` script in non-JS stacks.
+
+### Per-clone hook setup *(teams)*
+
+`.git/hooks/` is **not versioned**, so teammates who clone don't get the commit/checkout hooks automatically. Provide a **one-time** setup script (CLI install if missing → `graphify hook install` → point at the initial `graphify extract .`) wired to a package command, e.g. `npm run graphify:setup`. Do **not** put `graphify hook install` in a per-run `predev`/dev-start step — re-running it on every dev start reads as a reinstall; the dev-server watcher above is what keeps the graph fresh day to day.
+
 ---
 
 > **AI-DLC checkpoint — Phase 0.5**
