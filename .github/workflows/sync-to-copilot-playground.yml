@@ -18,7 +18,7 @@ jobs:
 
       - run: |
           rm -rf target/guide/*
-          cp -r * .gitignore target/guide/ 2>/dev/null || cp -r * target/guide/
+          rsync -a --exclude=target . target/guide/
           cd target
           git config user.email "bot@example.com"
           git config user.name "Sync Bot"
